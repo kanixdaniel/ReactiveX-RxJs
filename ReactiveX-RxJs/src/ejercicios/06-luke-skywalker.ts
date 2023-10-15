@@ -1,6 +1,6 @@
 import { ajax } from 'rxjs/ajax';
-import { switchMap, map } from 'rxjs/operators';
-import { zip, of } from 'rxjs';
+import { switchMap, map, concatMap, startWith } from 'rxjs/operators';
+import { zip, of, Observable } from 'rxjs';
 
 /**
  * Ejercicio: 
@@ -42,15 +42,59 @@ import { zip, of } from 'rxjs';
 (() => {
   // No tocar ========================================================
   const SW_API = 'https://swapi.dev/api';
-  const getRequest = (url: string) => ajax.getJSON<any>(url);
+  const getRequest$ = (url: string) => ajax.getJSON<any>(url);
   // ==================================================================
 
-  // Realizar el llamado al URL para obtener a Luke Skywalker
-  getRequest(`Aquí va un URL`).pipe(
-    // Realizar los operadores respectivos aquí
+  // Output sencillo
+  /* getRequest$(`${SW_API}/people/1`).pipe(
+    map<PersonajeSW, string>(personaje => personaje.films[0]),
+    concatMap<string, Observable<PeliculaSW>>(getRequest$)
+  ).subscribe(console.log); */
 
-    // NO TOCAR el subscribe ni modificarlo ==
-  ).subscribe(console.log)           // ==
+  // Output complejo
+  getRequest$(`${SW_API}/people/1`).pipe(
+    switchMap(resp => zip(
+      of(resp),
+      getRequest$(resp.films[0])
+    )),
+    map(([personaje, pelicula]) => ({ personaje, pelicula }))
+  ).subscribe(console.log)
   // =======================================
+
+  interface PersonajeSW {
+    name?: string;
+    height?: string;
+    mass?: string;
+    hair_color?: string;
+    skin_color?: string;
+    eye_color?: string;
+    birth_year?: string;
+    gender?: string;
+    homeworld?: string;
+    films?: string[];
+    species?: any[];
+    vehicles?: string[];
+    starships?: string[];
+    created?: Date;
+    edited?: Date;
+    url?: string;
+  }
+
+  interface PeliculaSW {
+    title?: string;
+    episode_id?: number;
+    opening_crawl?: string;
+    director?: string;
+    producer?: string;
+    release_date?: Date;
+    characters?: string[];
+    planets?: string[];
+    starships?: string[];
+    vehicles?: string[];
+    species?: string[];
+    created?: Date;
+    edited?: Date;
+    url?: string;
+  }
 
 })();
