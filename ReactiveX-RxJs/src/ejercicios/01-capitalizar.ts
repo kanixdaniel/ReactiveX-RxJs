@@ -4,6 +4,8 @@
  * Nota: NO hay que usar el ciclo "FOR OF", usar un observable y llamar la función capitalizar
  */
 
+import { from, map } from "rxjs";
+
 /**
  * Salida esperada:
  * Batman
@@ -21,4 +23,12 @@
   for (let nombre of nombres) {
     // console.log(capitalizar(nombre))
   }
+
+  // Con Observables
+  from(nombres)
+    .pipe(
+      map(p => capitalizar(p))
+    )
+    .subscribe(console.log)
+
 })();
