@@ -27,7 +27,7 @@ import { from, map } from "rxjs";
   // Con Observables
   from(nombres)
     .pipe(
-      map(p => capitalizar(p))
+      map(capitalizar)
     )
     .subscribe(console.log)
 

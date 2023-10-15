@@ -41,5 +41,8 @@ import { map, take } from 'rxjs/operators';
   // Es decir, la salida en el subscribe debe 
   // de estar procesada en su totalidad
   // ========================================
-  combineLatest([letras$, numeros$]).subscribe(console.log)
+  combineLatest([letras$, numeros$]).pipe(
+    map(([a, b]) => a + b)
+  )
+  .subscribe(console.log)
 })();

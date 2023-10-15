@@ -18,7 +18,7 @@ import { interval, map, take } from 'rxjs';
 (() => {
   const inicio = 7;
   const countdown$ = interval(700).pipe(
-    take(8),
+    take(inicio + 1),
     map(x => inicio - x)
   );
   // No tocar esta línea ==================
