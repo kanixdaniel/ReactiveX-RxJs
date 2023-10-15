@@ -1,4 +1,4 @@
-import { interval, timer } from 'rxjs';
+import { combineLatest, interval, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 /**
  * Ejercicio: Combinar ambos observables (letras$, numeros$)
@@ -41,4 +41,5 @@ import { map, take } from 'rxjs/operators';
   // Es decir, la salida en el subscribe debe 
   // de estar procesada en su totalidad
   // ========================================
+  combineLatest([letras$, numeros$]).subscribe(console.log)
 })();
